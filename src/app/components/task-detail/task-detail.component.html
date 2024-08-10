@@ -27,32 +27,28 @@
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 	</div>
 	<div class="modal-body">
-		<form [formGroup]="taskForm" (ngSubmit)="editTask()">
+		<form [formGroup]="taskForm" (ngSubmit)="editTask(selectedTask.id)">
 			<div class="form-row">
-				<div class="form-group">
-					<label for="title">Título</label>
-					<input type="text" id="title" formControlName="title">
-				</div>
-				<div class="form-group">  
-
-					<label for="description">Descripcion</label>
-					<textarea id="description" name="description" formControlName="description"></textarea>
-				</div>
-				<div class="form-group">
+                    <div class="col-md-6 form-group">
+                        <label for="title"><span> Título</span></label>
+                        <input type="text" id="title" class="form-control" formControlName="title">
+                    </div>
+                    <div class="col-md-6 form-group">  
+    
+                        <label for="description"><span>Descripción</span></label>
+                        <textarea id="description" class="form-control" name="description" formControlName="description"></textarea>
+                    </div>
+				<div class=" col-md-6 form-group">
 					<label for="status">Estado</label>
-					<select id="status" name="status" formControlName="status">
+					<select class="form-control" id="status" name="status" formControlName="status">
 						<option value="pending">Pending</option>  
-						<option value="inProgress">In Progress</option>
 						<option value="completed">Completed</option>
 					</select>
 				</div>  
 			</div>
 
-			<button class="btn btn-success mx-2" type="submit">Guardar nueva tarea</button>
+			<button class="btn btn-success mx-2" type="submit">Editar </button>
 		</form>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
 	</div>
 </ng-template> 
 

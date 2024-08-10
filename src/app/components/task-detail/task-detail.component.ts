@@ -1,9 +1,10 @@
 import { Component, inject, TemplateRef } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router} from '@angular/router';
-import { Task } from 'src/app/entities/Task';
 import { TaskService } from 'src/app/services/task.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-task-detail',
@@ -28,6 +29,12 @@ export class TaskDetailComponent {
   }
 
   openModal(content: TemplateRef<any>) {
+    this.taskForm = this.formBuilder.group({
+      title: this.selectedTask.title,
+      description: this.selectedTask.description,
+      status: ['pending']
+    });
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
@@ -35,8 +42,8 @@ export class TaskDetailComponent {
     );
   }
 
-  editTask(){
-    this.taskService.createTask(this.editTask).subscribe(
+  editTask(id:any){
+    this.taskService.updateTask(this.editTask, id).subscribe(
       (task) => {
         console.log('Task created:', task);
       },
@@ -46,4 +53,36 @@ export class TaskDetailComponent {
     );
   }
 
+  eliminarTarea(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esta acción!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor:  '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed)   
+ {
+        this.taskService.deleteTask(id).subscribe(
+          () => {
+            Swal.fire(
+              'Eliminado!',
+              'La tarea ha sido eliminada.',
+              'success'
+            )
+          },
+          (error) => {
+            Swal.fire(
+              'Error',
+              'Ocurrió un error al eliminar la tarea.',
+              'error'
+            )
+          }
+        );
+      }
+    })
+  }
 }
