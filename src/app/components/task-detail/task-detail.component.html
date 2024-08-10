@@ -1,0 +1,58 @@
+<div class="container">
+
+    <div class="input-group mb-3">
+        <span class="mr-3">Busca una tarea por su id: </span>
+        <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar">
+        <button class="btn btn-outline-secondary mx-2" type="button">Buscar</button>
+    </div>
+
+    <a class="nav-link mb-3" [routerLink]="['/tasks']"> <- Regresar </a>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ selectedTask.title }}</h5>
+                    <p class="card-text"><strong>Descripción:</strong> {{ selectedTask.description }}</p>
+                    <p class="card-text"><strong>Fecha de creación:</strong> {{ selectedTask.createdAt | date }}</p>
+                    <p class="card-text"><strong>Estado: </strong>{{ selectedTask.status }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary mx-2" (click)="openModal(content)"><i class="bi bi-edit"></i> Editar</button>
+                    <button type="button" class="btn btn-danger mx-2"><i class="fas fa-trash-alt"></i> Borrar</button>
+                </div>
+            </div>
+</div>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Editar tarea</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<form [formGroup]="taskForm" (ngSubmit)="editTask()">
+			<div class="form-row">
+				<div class="form-group">
+					<label for="title">Título</label>
+					<input type="text" id="title" formControlName="title">
+				</div>
+				<div class="form-group">  
+
+					<label for="description">Descripcion</label>
+					<textarea id="description" name="description" formControlName="description"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="status">Estado</label>
+					<select id="status" name="status" formControlName="status">
+						<option value="pending">Pending</option>  
+						<option value="inProgress">In Progress</option>
+						<option value="completed">Completed</option>
+					</select>
+				</div>  
+			</div>
+
+			<button class="btn btn-success mx-2" type="submit">Guardar nueva tarea</button>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
+	</div>
+</ng-template> 
+
