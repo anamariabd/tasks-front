@@ -4,6 +4,7 @@ import { Task } from 'src/app/entities/Task';
 import { TaskService } from 'src/app/services/task.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-task-list',
@@ -33,21 +34,23 @@ export class TaskListComponent /*implements OnInit*/ {
   }
 
   ngOnInit(): void {
-    //   this.listTask();
+     this.listTask();
 
-    this.tasks = [{
+   /* this.tasks = [{
       id: 1,
       title: "Tarea 1",
       description: "Hacer tal cosa y tal tal",
       status: "PENDIENTE",
       createdAt: "03/01/12"
     }
-    ];
+    ];*/
 
     this.taskForm = this.formBuilder.group({
+      id: 0,
       title: ['', Validators.required],
       description: [''],
-      status: ['pendiente']
+      status: ['PENDING'],
+      createdAt: '' 
     });
   }
 
@@ -70,9 +73,19 @@ export class TaskListComponent /*implements OnInit*/ {
   }
 
   addTask() {
-    this.taskService.createTask(this.newTask).subscribe(
+
+    this.taskForm.patchValue({createdAt: new Date() })
+
+    this.taskService.createTask(this.taskForm.value).subscribe(
       (task) => {
         console.log('Task created:', task);
+        Swal.fire({
+          icon: 'success',
+          title: 'Tarea creada correctamente',
+          showConfirmButton: true
+        });
+
+        this.listTask();
       },
       (error) => {
         console.error('Error creating task:', error);

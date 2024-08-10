@@ -43,12 +43,23 @@ export class TaskDetailComponent {
   }
 
   editTask(id:any){
-    this.taskService.updateTask(this.editTask, id).subscribe(
+    this.taskService.updateTask(this.taskForm.value, id).subscribe(
       (task) => {
-        console.log('Task created:', task);
+        Swal.fire({
+          icon: 'success',
+          title: 'Tarea actualizada correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
       },
       (error) => {
-        console.error('Error creating task:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al actualizar la tarea',
+          text: error.message,
+          showConfirmButton: true
+        });
+        console.error('Error editando task:', error);
       }
     );
   }
